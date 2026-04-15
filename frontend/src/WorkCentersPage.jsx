@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from './api';
 import { Plus, X } from 'lucide-react';
 
 const WorkCentersPage = () => {
@@ -13,7 +13,7 @@ const WorkCentersPage = () => {
 
   const fetchWorkCenters = async () => {
     try {
-      const res = await axios.get('http://127.0.0.1:8000/work_centers/');
+      const res = await api.get('/work_centers/');
       setWorkCenters(res.data || []);
     } catch (err) {
       console.error('Failed to load work centers', err);
@@ -24,7 +24,7 @@ const WorkCentersPage = () => {
   const handleCreate = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post('http://127.0.0.1:8000/work_centers/', form);
+      const res = await api.post('/work_centers/', form);
       alert('Work Center created');
       setShowModal(false);
       setForm({ name: '', code: '', location: '', tag: '', capacity: '' });

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from './api';
 import { useNavigate } from 'react-router-dom';
 import { Save, X, Calendar, Clock, User, Briefcase } from 'lucide-react';
 
@@ -37,11 +37,11 @@ const NewRequestPage = () => {
 
   const fetchDropdowns = async () => {
     try {
-      const eqRes = await axios.get('http://127.0.0.1:8000/equipment/');
-      const teamRes = await axios.get('http://127.0.0.1:8000/teams/');
-      const wcRes = await axios.get('http://127.0.0.1:8000/work_centers/');
+      const eqRes = await api.get('/equipment/');
+      const teamRes = await api.get('/teams/');
+      const wcRes = await api.get('/work_centers/');
       // Assuming you have a users endpoint, otherwise mock it or use login info
-      // const userRes = await axios.get('http://127.0.0.1:8000/users/'); 
+      // const userRes = await api.get('/users/'); 
       
       setEquipmentList(eqRes.data);
       setTeamList(teamRes.data);
@@ -70,7 +70,7 @@ const NewRequestPage = () => {
       // Clean up numeric IDs
       if (!payload.equipment_id) delete payload.equipment_id;
       if (!payload.work_center_id) delete payload.work_center_id;
-      await axios.post('http://127.0.0.1:8000/requests/', payload);
+      await api.post('/requests/', payload);
       alert("Request Created Successfully!");
       navigate('/kanban'); // Go back to board
     } catch (error) {

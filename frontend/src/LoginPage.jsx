@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import api from './api';
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
@@ -12,23 +13,15 @@ const LoginPage = () => {
     setError('');
 
     try {
-      const response = await fetch('http://127.0.0.1:8000/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
-      });
+      const response = await api.post('/login', { email, password });
 
-      const data = await response.json();
-
-      if (response.ok) {
-        localStorage.setItem('token', data.access_token);
-        localStorage.setItem('user', data.user_name);
-        navigate('/kanban');
-      } else {
-        setError(data.detail || "Login failed");
-      }
+      const data = response.data;
+      localStorage.setItem('token', data.access_token);
+      localStorage.setItem('user', data.user_name);
+      navigate('/kanban');
     } catch (err) {
-      setError("Server not responding.");
+      const errMsg = err?.response?.data?.detail || err?.message || "Server not responding.";
+      setError(errMsg);
     }
   };
 

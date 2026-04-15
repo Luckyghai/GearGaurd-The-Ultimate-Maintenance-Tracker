@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from './api';
 
 const ReportsPage = () => {
   const [summary, setSummary] = useState(null);
@@ -8,7 +8,7 @@ const ReportsPage = () => {
 
   const fetchSummary = async () => {
     try {
-      const res = await axios.get('http://127.0.0.1:8000/reports/summary');
+      const res = await api.get('/reports/summary');
       setSummary(res.data);
     } catch (err) { console.error('Failed to load reports', err); }
   };

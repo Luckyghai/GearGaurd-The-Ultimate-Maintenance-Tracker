@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import api from './api';
 
 const SignupPage = () => {
   const [formData, setFormData] = useState({ name: '', email: '', password: '' });
@@ -15,21 +16,12 @@ const SignupPage = () => {
     setError('');
 
     try {
-      const response = await fetch('http://127.0.0.1:8000/signup', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
-      });
-
-      if (response.ok) {
-        alert("Account Created! Please Login.");
-        navigate('/login');
-      } else {
-        const data = await response.json();
-        setError(data.detail || "Signup failed");
-      }
+      await api.post('/signup', formData);
+      alert("Account Created! Please Login.");
+      navigate('/login');
     } catch (err) {
-      setError("Backend not reachable.");
+      const errMsg = err?.response?.data?.detail || err?.message || "Backend not reachable.";
+      setError(errMsg);
     }
   };
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from './api';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Plus, Trash2, Search, Bell } from 'lucide-react';
 
@@ -20,7 +20,7 @@ const EquipmentPage = () => {
 
   const fetchEquipment = async () => {
     try {
-      const res = await axios.get('http://127.0.0.1:8000/equipment/');
+      const res = await api.get('/equipment/');
       setEquipment(res.data);
     } catch (error) {
       console.error("Error fetching equipment", error);
@@ -30,7 +30,7 @@ const EquipmentPage = () => {
   const handleAddMachine = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://127.0.0.1:8000/equipment/', newMachine);
+      await api.post('/equipment/', newMachine);
       setShowModal(false);
       setNewMachine({ name: '', serial_number: '', location: '', technician: '', category: '', employee: '' });
       fetchEquipment();
@@ -43,7 +43,7 @@ const EquipmentPage = () => {
   const handleDelete = async (id) => {
     if(!confirm("Are you sure you want to remove this equipment?")) return;
     try {
-        await axios.delete(`http://127.0.0.1:8000/equipment/${id}`);
+        await api.delete(`/equipment/${id}`);
         fetchEquipment();
     } catch (error) {
         alert("Could not delete.");

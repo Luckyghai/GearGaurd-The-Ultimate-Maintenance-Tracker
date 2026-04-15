@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
-import axios from 'axios';
+import api from './api';
 import { useNavigate } from 'react-router-dom';
 import { Search, Plus, Bell, Settings, Filter } from 'lucide-react';
 
@@ -45,7 +45,7 @@ function KanbanBoard() {
   // NEW: Fetch Stats Function
   const fetchStats = async () => {
     try {
-      const res = await axios.get('http://127.0.0.1:8000/stats/');
+      const res = await api.get('/stats/');
       setStats({
         critical: res.data.critical_count,
         load: res.data.tech_load,
@@ -58,7 +58,7 @@ function KanbanBoard() {
 
   const fetchRequests = async () => {
     try {
-      const response = await axios.get('http://127.0.0.1:8000/requests/');
+      const response = await api.get('/requests/');
       const requests = response.data;
       
       const newColumns = { 
@@ -81,7 +81,7 @@ function KanbanBoard() {
 
   const fetchEquipment = async () => {
     try {
-      const res = await axios.get('http://127.0.0.1:8000/equipment/');
+      const res = await api.get('/equipment/');
       setEquipmentList(res.data);
     } catch (error) {
       console.error("Error fetching equipment:", error);
@@ -89,7 +89,7 @@ function KanbanBoard() {
   };
   const fetchTeams = async () => {
     try {
-      const res = await axios.get('http://127.0.0.1:8000/teams/');
+      const res = await api.get('/teams/');
       setTeams(res.data || []);
     } catch (err) {
       console.error('Error fetching teams', err);
@@ -98,7 +98,7 @@ function KanbanBoard() {
 
   const fetchWorkCenters = async () => {
     try {
-      const res = await axios.get('http://127.0.0.1:8000/work_centers/');
+      const res = await api.get('/work_centers/');
       setWorkCenters(res.data || []);
     } catch (err) {
       console.error('Error fetching work centers', err);
@@ -139,7 +139,7 @@ function KanbanBoard() {
       });
 
       try {
-        await axios.put(`http://127.0.0.1:8000/requests/${draggableId}`, {
+        await api.put(`/requests/${draggableId}`, {
           status: destination.droppableId
         });
         // Update stats after moving (in case it moves to Repaired/Scrap)

@@ -134,9 +134,24 @@ class RequestUpdate(BaseModel):
 #setting up the app
 app = FastAPI()
 
+# CORS Configuration - Allow frontend origins
+allowed_origins = [
+    "http://localhost:5173",  # Local development
+    "http://localhost:3000",  # Alternative local port
+    "http://127.0.0.1:5173",  # Local development (loopback)
+    "http://127.0.0.1:3000",  # Alternative local port (loopback)
+]
+
+# For deployed GitHub Pages sites - accept any github pages domain
+import os
+frontend_url = os.getenv("FRONTEND_URL")
+if frontend_url:
+    allowed_origins.append(frontend_url)
+    
+# Allow all origins for now to support deployment - RESTRICT in production!
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"], 
+    allow_origins=["*"],  # Allow all origins
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import api from './api';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 function startOfMonth(date) {
@@ -21,7 +21,7 @@ const MaintenanceCalendar = () => {
 
   const fetchRequests = async () => {
     try {
-      const res = await axios.get('http://127.0.0.1:8000/requests/');
+      const res = await api.get('/requests/');
       setRequests(res.data || []);
     } catch (err) { console.error('Failed to load requests', err); }
   };
@@ -29,9 +29,9 @@ const MaintenanceCalendar = () => {
   const fetchDropdowns = async () => {
     try {
       const [eqRes, teamRes, wcRes] = await Promise.all([
-        axios.get('http://127.0.0.1:8000/equipment/'),
-        axios.get('http://127.0.0.1:8000/teams/'),
-        axios.get('http://127.0.0.1:8000/work_centers/')
+        api.get('/equipment/'),
+        api.get('/teams/'),
+        api.get('/work_centers/')
       ]);
       setEquipmentList(eqRes.data || []);
       setTeams(teamRes.data || []);

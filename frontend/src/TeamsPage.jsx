@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from './api';
 import { Plus, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
@@ -13,7 +13,7 @@ const TeamsPage = () => {
 
   const fetchTeams = async () => {
     try {
-      const res = await axios.get('http://127.0.0.1:8000/teams/');
+      const res = await api.get('/teams/');
       setTeams(res.data || []);
     } catch (err) { console.error('Failed to fetch teams', err); }
   };
@@ -21,7 +21,7 @@ const TeamsPage = () => {
   const createTeam = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://127.0.0.1:8000/teams/', form);
+      await api.post('/teams/', form);
       setShowModal(false);
       setForm({ name: '', members: '', company: 'My Company (San Francisco)' });
       fetchTeams();
